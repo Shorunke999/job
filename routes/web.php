@@ -19,6 +19,5 @@ use App\Mail\succesfulregistration;
 Route::get('/', function () {
     $user = \App\Models\User::find(6);
     Mail::to($user->email)->send(new succesfulregistration($user));
-    //\App\Jobs\mailjob::dispatch($user);
     return view('welcome');
 });
