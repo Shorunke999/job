@@ -8,19 +8,17 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Mail\succesfulregistration;
-use App\Models\User;
-use Illuminate\Support\Facades\Mail;
 
-class mailjob implements ShouldQueue
+class mailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
     /**
      * Create a new job instance.
      */
-    public function __construct(public User $user)
+    public function __construct()
     {
-        $this->user = $user;
+        //
     }
 
     /**
@@ -28,7 +26,6 @@ class mailjob implements ShouldQueue
      */
     public function handle(): void
     {
-        //dd($this->user);
-        Mail::to($this->user->email)->send(new succesfulregistration($this->user));
-     }
+        //
+    }
 }
