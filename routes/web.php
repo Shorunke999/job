@@ -2,9 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
-
+use App\Http\Resources\userResource;  
+use Illuminate\Support\Facades\Hash;
 use App\Mail\succesfulregistration;
-
+use Illuminate\Support\Facades\Redirect;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,7 +18,8 @@ use App\Mail\succesfulregistration;
 */
 
 Route::get('/', function () {
-    $user = \App\Models\User::find(6);
-    Mail::to($user->email)->send(new succesfulregistration($user));
-    return view('welcome');
+    return view('Home');
 });
+Route::post('/', function () {
+    return Redirect::back()->with('msg' , 'redirected');
+})->name('form');
