@@ -12,47 +12,43 @@ use App\Models\User;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
-
-    public function Register(Request $request){
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-            'name' => 'required',
-            'device_name' => 'required',
-        ]);
-        $user = \App\Models\User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password'=>Hash::make($request->password),
-         ]);
-         $Token = $user->createToken($request->device_name)->plainTextToken;
-         return response()->json(['msg'=>'sucessful' , 'tokens'=> $Token]);
-
+    public function pollenUnit(){
+        return view('pollenpage');
     }
-    public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-            'device_name' => 'required',
-        ]);
-
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+    public function pollenUnitPost(Request $request){
+        $pollenUnitData = \App\Models\announced_pu_results::where('polling_unit_uniqueid',$request->pollenUnitId)->get();
+        $sumOfPollenData = $pollenUnitData->pluck('party_score')->sum();
+       return redirect()->back()
+       ->with('pollenUnitData',$pollenUnitData)
+       ->with('sumOfPollenData',$sumOfPollenData);
+    }
+    public function localGovt(){
+        return view('localGovt');
+    }
+    public function localGovtPost(Request $request){
+        $aks = \App\Models\polling_unit::where('lga_id', $request->lga_id)->get();
+        $total_result_lga = 0;
+        foreach ($ak as $aks){
+            $pollen_unit_unique_id = $aks->pollen_unit_id;
+            $pollenData = \App\Models\announced_pu_results::where('pollen_unit_unique_id',$pollen_unit_unique_id)
+            ->pluck('party_score')
+            ->sum();
+            $total_result_lga= $total_result_lga + $pollenData;
         }
+        return redirect()
+        ->back()
+        ->with('total_result_lga',$total_result_lga);
+    }
+    public function newPollenUnitVote(){
+        return view(' newPollenUnitPost');
+    }
+    public function newPollenUnitVotePOst(Request $request){
+        //$validatedRequest = $request->validate([]);
+        $validatedRequest = true;
+        if ($validatedRequest){
 
-        $token = $user->createToken($request->device_name)->plainTextToken;
-
-        return response()->json(['token' => $token]);
+        }
+        return view(' newPollenUnitPost');
     }
 
-    public function logout(Request $request){
-        $request->user()->currentAccessToken()->delete();
-        $request->user()->logout();
-        return response()->json(['msg' => 'user is logged out']);
-    }
 }
