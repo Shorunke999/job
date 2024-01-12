@@ -12,6 +12,7 @@ use App\Models\User;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+    //NOTE ELOQUENT RELATION BETWEEN DB IS NOT USED..THE DATA ARE SEEDED AS GIVEN.
     public function pollenUnit(){
         return view('pollenpage');
     }
@@ -23,17 +24,22 @@ class Controller extends BaseController
        ->with('sumOfPollenData',$sumOfPollenData);
     }
     public function localGovt(){
-        return view('localGovt');
+        //gets all local govt in array
+        $lga_datas = \App\Models\lga::all();
+        //local govt data is passed into the view
+        return view('localGovt',['lga_datas'=>$lga_datas]);
     }
     public function localGovtPost(Request $request){
+        //with the selected local govt. we fetch their polling unit
         $aks = \App\Models\polling_unit::where('lga_id', $request->lga_id)->get();
         $total_result_lga = 0;
-        foreach ($ak as $aks){
-            $pollen_unit_unique_id = $aks->pollen_unit_id;
-            $pollenData = \App\Models\announced_pu_results::where('pollen_unit_unique_id',$pollen_unit_unique_id)
+        //loop eack polling unit to add up each party score and sum all together
+        foreach($aks as $ak){
+            $polling_unit_uniqueid = $ak->uniqueid;
+            $pollingData = \App\Models\announced_pu_results::where('polling_unit_uniqueid',$polling_unit_uniqueid)
             ->pluck('party_score')
             ->sum();
-            $total_result_lga= $total_result_lga + $pollenData;
+            $total_result_lga= $total_result_lga + $pollingData;
         }
         return redirect()
         ->back()

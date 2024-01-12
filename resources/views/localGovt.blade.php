@@ -1,8 +1,13 @@
 <form action="{{route('localGovtPost')}}" method="POST">
     @csrf
     <div>
-        <label for="lga_id">enter local government id</label>
-        <input type="text" placeholder="lga_id" name = 'lga_id' required/>
+        <select name = 'lga_id'>
+            @foreach($lga_datas as $lga_data)
+            <option value="{{$lga_data->lga_id}}">
+                {{$lga_data->lga_name}}
+            </option>
+            @endforeach
+        </select>
         <button type='submit'> submit</button>
     </div>
 </form>
