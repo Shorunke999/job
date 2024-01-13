@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Redirect;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/pollenPage', [ \App\Http\Controllers\Controller::class,'pollenUnit']);
+Route::get('/', [ \App\Http\Controllers\Controller::class,'pollenUnit']);
 Route::post('/pollenPage', [ \App\Http\Controllers\Controller::class,'pollenUnitPost'])->name('pollenunitpage');
 Route::get('/localGovt', [ \App\Http\Controllers\Controller::class,'localGovt'])->name('localGovt');
 Route::post('/localGovt', [ \App\Http\Controllers\Controller::class,'localGovtPost'])->name('localGovtPost');

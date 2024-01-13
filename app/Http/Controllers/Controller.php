@@ -13,6 +13,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
     //NOTE ELOQUENT RELATION BETWEEN DB IS NOT USED..THE DATA ARE SEEDED AS GIVEN.
+    //THIS MAY AFFECTS THE PERFORMANCE OF WEB APP
     public function pollenUnit(){
         return view('pollenpage');
     }
@@ -46,15 +47,28 @@ class Controller extends BaseController
         ->with('total_result_lga',$total_result_lga);
     }
     public function newPollenUnitVote(){
-        return view(' newPollenUnitPost');
+        return view('newPollenUnitVote');
     }
     public function newPollenUnitVotePOst(Request $request){
-        //$validatedRequest = $request->validate([]);
-        $validatedRequest = true;
-        if ($validatedRequest){
+        $request->validate([
+            'pollenUniqueid' => 'required|string|max:255',
+            'party' => 'required|array',
+            'party.*.party_abbreviation' => 'required|string|max:255',
+            'party.*.party_scores' => 'required|integer',
+        ]);
+        $pollenUnit = new \App\Models\announced_pu_results();
 
+        // Save party data
+        foreach ($request->input('party') as $partyData) {
+            $pollenUnit->create([
+                'polling_unit_uniqueid'=> $request->input('pollenUniqueid'),
+                'party_abbreviation' => $partyData['party_abbreviation'],
+                'party_scores' => $partyData['party_scores'],
+            ]);
         }
-        return view(' newPollenUnitPost');
-    }
 
+        return redirect()
+        ->back()
+        ->with('successful','data has been stored succesfully');
+    }
 }
