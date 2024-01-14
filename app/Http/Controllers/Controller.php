@@ -71,4 +71,12 @@ class Controller extends BaseController
         ->back()
         ->with('successful','data has been stored succesfully');
     }
+    public function test()
+    {
+        $data =  \App\Models\states::make([
+            'state_id' => 39,
+            'state_name'=> 'we ghost'
+        ]);
+        return json_encode(['data'=>$data]);
+    }
 }
