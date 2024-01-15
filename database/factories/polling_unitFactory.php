@@ -3,12 +3,11 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\states>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\polling_unit>
  */
-class statesFactory extends Factory
+class polling_unitFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,9 +17,7 @@ class statesFactory extends Factory
     public function definition(): array
     {
         return [
-            'state_id' => fake()->unique()->randomNumber(),
-            'state_name' => Str::random(5),
-        ];
             
+        ];
     }
 }

@@ -13,11 +13,9 @@ class ExampleTest extends TestCase
      * A basic test example.
      */
     public function test_the_application_returns_a_successful_response(): void
-    {   $data_value = [
-        'result_id'=>30
-    ];
-        $id = 30;
-        $response = $this->get('/api/test/'.$id)->json('data');
-        $response->assertSame();
+    {   
+        $input = \App\Models\states::factory(1)->make();
+        $response = $this->get('/api/test');
+        $response->ddHeaders();
     }
 }

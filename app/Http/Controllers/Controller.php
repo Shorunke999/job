@@ -73,7 +73,7 @@ class Controller extends BaseController
     }
     public function test(Request $request)
     {
-        
+        $dta = \App\Models\states::where('state_id',6)->first();
         return response()->json(['data'=>$dta]);
     }
 }
